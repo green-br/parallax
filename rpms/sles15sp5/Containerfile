@@ -1,0 +1,15 @@
+FROM registry.opensuse.org/opensuse/leap:15.5
+MAINTAINER Thomas Green thomas.green@bristol.ac.uk
+USER root
+COPY podman.spec /tmp/podman.spec
+COPY podman-5.5.2-1.1.src.rpm  /tmp/podman-5.5.2-1.1.src.rpm
+RUN set -euo pipefail; \
+    zypper -n ref; \
+    zypper -n in -f git rpm-ndb rpm-build rpmdevtools wget cpio cni device-mapper-devel fdupes glib2-devel-static glibc-devel-static go-go-md2man go golang-packaging libapparmor-devel libassuan-devel libbtrfs-devel libcontainers-common libgpgme-devel libostree-devel libseccomp-devel man util-linux pkgconfig coreutils findutils diffutils slirp4netns; \
+    zypper -n clean; \
+    rm -rf /var/log/{lastlog,tallylog,zypper.log,zypp/history,YaST2} ;
+
+RUN cd /tmp; \
+    ulimit -a; \
+    rpm -iv podman-5.5.2-1.1.src.rpm ; \
+    rpmbuild -ba --define '_smp_mflags -j1' podman.spec;
