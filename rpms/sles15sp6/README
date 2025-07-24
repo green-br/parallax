@@ -1,0 +1,5 @@
+# Podman RPM for SLES15sp6
+
+1. Obtain the src.rpm e.g. https://download.opensuse.org/ports/aarch64/source/tumbleweed/repo/oss/src/podman-5.5.2-1.1.src.rpm
+2. Use podman to use the Containerfile e.g. "podman build . -t podman_sles15sp6"
+3. Copy the resulting RPM from the container.
