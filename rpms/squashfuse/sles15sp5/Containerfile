@@ -1,0 +1,14 @@
+FROM registry.opensuse.org/opensuse/leap:15.5
+MAINTAINER Thomas Green thomas.green@bristol.ac.uk
+USER root
+COPY squashfuse.spec /tmp/squashfuse.spec
+COPY squashfuse-0.5.0-150600.1.3.src.rpm   /tmp/squashfuse-0.5.0-150600.1.3.src.rpm
+RUN set -euo pipefail; \
+    zypper -n ref; \
+    zypper -n in -f git rpm-ndb rpm-build rpmdevtools autoconf automake fdupes pkgconfig fuse-devel gcc libattr-devel libtool make sed xz-devel zlib-devel ; \
+    zypper -n clean; \
+    rm -rf /var/log/{lastlog,tallylog,zypper.log,zypp/history,YaST2} ;
+
+RUN cd /tmp; \
+    rpm -iv squashfuse-0.5.0-150600.1.3.src.rpm  ; \
+    rpmbuild -ba --define '_smp_mflags -j1' squashfuse.spec;

@@ -1,0 +1,5 @@
+# Podman RPM for SLES15sp5
+
+1. Depends on squashfuse but only as runtime requirement.
+2. Use podman to use the Containerfile e.g. "podman build . -t parallax_sles15sp5"
+3. Copy the resulting RPM from the container.

@@ -1,0 +1,14 @@
+FROM registry.opensuse.org/opensuse/leap:15.5
+MAINTAINER Thomas Green thomas.green@bristol.ac.uk
+USER root
+COPY parallax.spec /tmp/parallax.spec
+RUN set -euo pipefail; \
+    zypper -n ref; \
+    zypper -n in -f git rpm-ndb rpm-build rpmdevtools wget device-mapper-devel go golang-packaging libbtrfs-devel man util-linux pkgconfig coreutils findutils diffutils; \
+    zypper -n clean; \
+    rm -rf /var/log/{lastlog,tallylog,zypper.log,zypp/history,YaST2} ;
+    
+RUN cd /tmp; \
+    curl -L -k -o /usr/src/packages/SOURCES/parallax-0.6.3.tar.gz https://github.com/sarus-suite/parallax/archive/refs/tags/v0.6.3.tar.gz ; \
+    rpmbuild -ba --define '_smp_mflags -j1' parallax.spec;
+
